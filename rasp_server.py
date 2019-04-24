@@ -9,6 +9,7 @@ import time
 from time import sleep 
 from sinchsms import SinchSMS
 import pyimgur
+from PIL import Image
 
 CLIENT_ID = "ea87ff14c8d3947"
 
@@ -41,7 +42,7 @@ def send_sms(a,b,c):
 
 
 	number = '+918059710704'
-	message = 'New Garbage Detected Image : '+a+" Left Image Image : "+b+"Right Image : "+c
+	message = 'New Garbage Detected Image : '+a+" Left Image Image : "+b+" Right Image : "+c
 
 	client = SinchSMS("0ca08f70-4fa2-4547-a9b0-5b1280115d6d", "QKewCNo4oEqXbgwxEglPxA==")
 
@@ -84,24 +85,24 @@ def predict():
     print(top_5_prediction)
     top = top_5_prediction[4]
     top_name = top[0]
-    print("The object is : ",top_name)
+    #print("The object is : ",top_name)
 
     final_result= waste_type[class_dictionary[top_name]]
-    print(final_result)
+    print("The garbage is : ",final_result)
     if final_result == "Recyclable":
         prediction = 'Recyclable Garbage'
         folder_name=get_filename()
-        os.mkdir('C:/Users/Saqib kamal/Desktop/Major/Recyclable/'+folder_name)
-        copy(filename,'C:/Users/Saqib kamal/Desktop/Major/Recyclable/'+folder_name+'/')
-        copy(left_filename,'C:/Users/Saqib kamal/Desktop/Major/Recyclable/'+folder_name+'/')
-        copy(right_filename,'C:/Users/Saqib kamal/Desktop/Major/Recyclable/'+folder_name+'/')
+        os.mkdir('Recyclable/'+folder_name)
+        copy(filename,'Recyclable/'+folder_name+'/')
+        copy(left_filename,'Recyclable/'+folder_name+'/')
+        copy(right_filename,'Recyclable/'+folder_name+'/')
     else:
         prediction = 'Compost'
         folder_name=get_filename()
-        os.mkdir('C:/Users/Saqib kamal/Desktop/Major/Recyclable/'+folder_name)
-        copy(filename,'C:/Users/Saqib kamal/Desktop/Major/Compost/'+folder_name+'/')
-        copy(left_filename,'C:/Users/Saqib kamal/Desktop/Major/Compost/'+folder_name+'/')
-        copy(right_filename,'C:/Users/Saqib kamal/Desktop/Major/Compost/'+folder_name+'/')
+        os.mkdir('Compost/'+folder_name)
+        copy(filename,'Compost/'+folder_name+'/')
+        copy(left_filename,'Compost/'+folder_name+'/')
+        copy(right_filename,'Compost/'+folder_name+'/')
 
 
     a,b,c=upload_image_to_imgur(filename,left_filename,right_filename)
@@ -111,10 +112,9 @@ def predict():
     os.remove(right_filename)
 
 
-    
+    print("Image Processing Complete")    
     return jsonify(final_result)
-    print("Image Recieved")
-    return "Image Recieved"
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=233)

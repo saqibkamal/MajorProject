@@ -5,12 +5,9 @@ import requests
 import cv2
 import numpy as np
 import base64
-import time
 import os
-url="http://192.168.43.186:8080/shot.jpg"
+camera_url="http://192.168.43.110:8080/shot.jpg"
 server_url="http://192.168.43.185:233"
-
-
 
 GPIO_TRIGGER = 16
 GPIO_ECHO    = 18
@@ -92,7 +89,7 @@ def get_filename():
 
 def capture_image():
     print("capture_image ")
-    img=requests.get(url)
+    img=requests.get(camera_url)
     img_arr=np.array(bytearray(img.content),dtype=np.uint8)
     imgg= cv2.imdecode(img_arr,-1)
     
@@ -104,11 +101,6 @@ def capture_image():
 def send_image(mimage,limage,rimage):
     
     print("Sending Image")
-    # img=requests.get(url)
-    # img_arr=np.array(bytearray(img.content),dtype=np.uint8)
-    # imgg= cv2.imdecode(img_arr,-1)
-    
-    # cv2.imwrite('01.png',imgg)
     
     with open(mimage,"rb") as a:
         main_jpg_as_text=base64.b64encode(a.read())
@@ -145,13 +137,13 @@ try:
             #time.sleep(5)
             left(0.5)
             left_image = capture_image()
-            left_dis=get_distance()
+            left_dis = get_distance()
             time.sleep(3)
 
             right(1)
             right_image = capture_image()
-            right_dis=get_distance()
-            time.sleep(3)
+            right_dis = get_distance()
+            #time.sleep(3)
 
             send_image(main_image,left_image,right_image)
 
@@ -169,6 +161,7 @@ except KeyboardInterrupt:
     print("YES")
     GPIO.cleanup()
             
+
 
 
 
